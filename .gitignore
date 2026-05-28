@@ -1,0 +1,73 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# .gitignore  –  Stress Detection System
+# ─────────────────────────────────────────────────────────────────────────────
+
+# ── Environment & secrets ────────────────────────────────────────────────────
+.env
+*.env.local
+
+# ── Python ───────────────────────────────────────────────────────────────────
+.venv/
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.egg-info/
+dist/
+build/
+*.egg
+.eggs/
+pip-wheel-metadata/
+
+# ── Testing & coverage ───────────────────────────────────────────────────────
+.pytest_cache/
+.coverage
+htmlcov/
+coverage.xml
+*.junit.xml
+
+# ── Ruff / linting ───────────────────────────────────────────────────────────
+.ruff_cache/
+
+# ── MLflow ───────────────────────────────────────────────────────────────────
+mlruns/
+mlartifacts/
+
+# ── Data ─────────────────────────────────────────────────────────────────────
+ml/data/wesad/          # Raw WESAD dataset — download separately
+ml/data/*.pkl
+ml/data/*.npy
+ml/data/*.npz
+
+# ── Model checkpoints ────────────────────────────────────────────────────────
+*.pt
+*.pth
+*.ckpt
+models/
+
+# ── Docker ───────────────────────────────────────────────────────────────────
+.docker/
+
+# ── macOS ────────────────────────────────────────────────────────────────────
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# ── VSCode ───────────────────────────────────────────────────────────────────
+.vscode/
+!.vscode/extensions.json   # keep extension recommendations if any
+
+# ── Jupyter (for exploration notebooks) ──────────────────────────────────────
+.ipynb_checkpoints/
+*.ipynb
+
+# ── Logs ─────────────────────────────────────────────────────────────────────
+*.log
+logs/
+
+# ── MinIO local data ─────────────────────────────────────────────────────────
+minio-data/
+
+# ── Kubernetes secrets ───────────────────────────────────────────────────────
+k8s/secrets.yaml        # only secrets.template.yaml is committed

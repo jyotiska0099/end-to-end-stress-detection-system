@@ -1,0 +1,68 @@
+{
+  "folders": [
+    {
+      "name": "stress-detection-system (root)",
+      "path": "."
+    },
+    {
+      "name": "inference-service",
+      "path": "services/inference-service"
+    },
+    {
+      "name": "llm-service",
+      "path": "services/llm-service"
+    },
+    {
+      "name": "response-router",
+      "path": "services/response-router"
+    },
+    {
+      "name": "sensor-simulator",
+      "path": "services/sensor-simulator"
+    },
+    {
+      "name": "retraining-pipeline",
+      "path": "services/retraining-pipeline"
+    },
+    {
+      "name": "ml",
+      "path": "ml"
+    }
+  ],
+  "settings": {
+    "python.defaultInterpreterPath": "${workspaceFolder:stress-detection-system (root)}/.venv/bin/python",
+    "python.terminal.activateEnvironment": true,
+    "editor.formatOnSave": true,
+    "[python]": {
+      "editor.defaultFormatter": "charliermarsh.ruff",
+      "editor.codeActionsOnSave": {
+        "source.fixAll.ruff": "explicit",
+        "source.organizeImports.ruff": "explicit"
+      }
+    },
+    "ruff.enable": true,
+    "ruff.path": [
+      "${workspaceFolder:stress-detection-system (root)}/.venv/bin/ruff"
+    ],
+    "files.exclude": {
+      "**/__pycache__": true,
+      "**/.pytest_cache": true,
+      "**/*.pyc": true,
+      "**/.ruff_cache": true
+    },
+    "terminal.integrated.env.osx": {
+      "PYTHONPATH": "${workspaceFolder:stress-detection-system (root)}"
+    }
+  },
+  "extensions": {
+    "recommendations": [
+      "charliermarsh.ruff",
+      "ms-python.python",
+      "ms-python.debugpy",
+      "ms-azuretools.vscode-docker",
+      "redhat.vscode-yaml",
+      "mtxr.sqltools",
+      "grafana.vscode-grafana-jsonnet"
+    ]
+  }
+}

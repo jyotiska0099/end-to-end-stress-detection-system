@@ -375,8 +375,8 @@ kubectl get hpa -n stress-system --watch
 
 | Phase | Focus | Status |
 |---|---|---|
-| 1 | Repo setup, tooling, environment config | ✅ Complete |
-| 2 | WESAD loader, preprocessing, CNN+LSTM training, MLflow | ⬜ Next |
+| 1 | Repo setup, tooling, environment config | ⬜ Next|
+| 2 | WESAD loader, preprocessing, CNN+LSTM training, MLflow | ⬜ |
 | 3 | Inference service + Dockerize | ⬜ |
 | 4 | Sensor simulator (multi-patient concurrent) | ⬜ |
 | 5a | LLM service + Groq | ⬜ |
