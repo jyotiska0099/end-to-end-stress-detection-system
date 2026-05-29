@@ -9,6 +9,7 @@ Usage:
 """
 
 import argparse
+import pickle
 import time
 from pathlib import Path
 
@@ -115,7 +116,7 @@ def run_fold(test_subject: str, data_dir: Path) -> float:
     te_eda, te_bvp, te_labels = windows_to_tensors(test_windows)
 
     # ── Normalize ─────────────────────────────────────────────────────────────
-    tr_eda_n, tr_bvp_n, te_eda_n, te_bvp_n, _, _ = normalize(
+    tr_eda_n, tr_bvp_n, te_eda_n, te_bvp_n, eda_scaler, bvp_scaler = normalize(
         tr_eda.numpy(),
         tr_bvp.numpy(),
         te_eda.numpy(),
@@ -171,6 +172,12 @@ def run_fold(test_subject: str, data_dir: Path) -> float:
                 "n_subwindows": 6,
             }
         )
+
+        for _name, _scaler in [("eda_scaler", eda_scaler), ("bvp_scaler", bvp_scaler)]:
+            _path = f"{_name}_{test_subject}.pkl"
+            with open(_path, "wb") as f:
+                pickle.dump(_scaler, f)
+            mlflow.log_artifact(_path)
 
         for epoch in range(1, EPOCHS + 1):
             t0 = time.time()
