@@ -1,5 +1,6 @@
 import json
 import logging
+import re
 
 import google.generativeai as genai
 
@@ -45,6 +46,79 @@ def _build_user_prompt(patient_id: str, stress_probability: float, label: int) -
     )
 
 
+class MockUsageMetadata:
+    prompt_token_count = 120
+    candidates_token_count = 40
+
+
+class MockResponse:
+    def __init__(self, text: str):
+        self.text = text
+        self.usage_metadata = MockUsageMetadata()
+
+
+class MockGenerativeModel:
+    def generate_content(self, prompt: str) -> MockResponse:
+        # Extract stress probability from the prompt
+        match = re.search(
+            r"Stress probability:\s*([0-9]*\.?[0-9]+)",
+            prompt,
+            re.IGNORECASE,
+        )
+
+        stress_probability = float(match.group(1)) if match else 0.0
+
+        if stress_probability < 0.35:
+            payload = {
+                "severity": "none",
+                "urgency_level": 1,
+                "summary": ("Patient shows no significant indicators of physiological stress."),
+                "recommendation": (
+                    "Continue routine monitoring and maintain standard care procedures."
+                ),
+                "follow_up_minutes": 60,
+            }
+
+        elif stress_probability < 0.55:
+            payload = {
+                "severity": "mild",
+                "urgency_level": 2,
+                "summary": ("Patient exhibits mild indicators of physiological stress."),
+                "recommendation": (
+                    "Monitor for changes in stress markers and encourage rest or stress-reduction measures."
+                ),
+                "follow_up_minutes": 30,
+            }
+
+        elif stress_probability < 0.75:
+            payload = {
+                "severity": "moderate",
+                "urgency_level": 3,
+                "summary": ("Patient demonstrates moderate physiological stress levels."),
+                "recommendation": (
+                    "Increase observation frequency and assess for contributing factors. "
+                    "Consider supportive interventions if stress indicators persist."
+                ),
+                "follow_up_minutes": 15,
+            }
+
+        else:
+            payload = {
+                "severity": "high",
+                "urgency_level": 5,
+                "summary": (
+                    "Patient is showing high physiological stress levels requiring prompt attention."
+                ),
+                "recommendation": (
+                    "Initiate immediate clinical review and closely monitor the patient. "
+                    "Evaluate for acute stressors or deterioration in condition."
+                ),
+                "follow_up_minutes": 5,
+            }
+
+        return MockResponse(json.dumps(payload))
+
+
 def get_recommendation(
     patient_id: str,
     stress_probability: float,
@@ -57,10 +131,13 @@ def get_recommendation(
         (StressRecommendation, prompt_tokens, output_tokens)
     """
     genai.configure(api_key=settings.gemini_api_key)
-    model = genai.GenerativeModel(
-        model_name=settings.gemini_model,
-        system_instruction=SYSTEM_PROMPT,
-    )
+    # Uncomment the below line when quota is upgraded for Gemini API
+    # model = genai.GenerativeModel(
+    #     model_name=settings.gemini_model,
+    #     system_instruction=SYSTEM_PROMPT,
+    # )
+
+    model = MockGenerativeModel()
 
     prompt = _build_user_prompt(patient_id, stress_probability, label)
     logger.info("Calling Gemini for patient=%s prob=%.3f", patient_id, stress_probability)
